@@ -1,0 +1,354 @@
+import 'package:flutter/material.dart';
+import '../../navigation/main_navigation.dart';
+
+class CreateAccountScreen extends StatefulWidget {
+  final String phoneNumber;
+
+  const CreateAccountScreen({
+    Key? key,
+    required this.phoneNumber,
+  }) : super(key: key);
+
+  @override
+  _CreateAccountScreenState createState() => _CreateAccountScreenState();
+}
+
+class _CreateAccountScreenState extends State<CreateAccountScreen> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
+  bool _agreeToTerms = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = screenWidth >= 798;
+    final isSmallScreen = screenWidth < 360;
+
+    final horizontalPadding = isTablet ? screenWidth * 0.08 : 16.0;
+
+    return Scaffold(
+      resizeToAvoidBottomInset: true,   // 🔥 fixes keyboard overflow
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/Splash Screen.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.transparent,
+                Colors.black.withOpacity(0.3),
+                Colors.black.withOpacity(0.6),
+                Colors.black.withOpacity(0.9),
+              ],
+              stops: const [0.0, 0.3, 0.6, 1.0],
+            ),
+          ),
+          child: SafeArea(
+            child: SingleChildScrollView(   // 🔥 ensures scroll when keyboard appears
+              physics: const BouncingScrollPhysics(),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: isTablet ? 450 : double.infinity,
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(height: isTablet ? 250 : 180),
+
+                      // Bottom Card
+                      Container(
+                        width: double.infinity,
+                        constraints: BoxConstraints(
+                          maxWidth: isTablet ? 600 : double.infinity,
+                        ),
+                        padding: EdgeInsets.all(horizontalPadding),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              const Color(0xFFAB3965).withOpacity(0.9),
+                              const Color(0xFF2F1518).withOpacity(0.95),
+                            ],
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Create Account',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isTablet ? 32 : 28,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+
+                            _buildTextField(
+                              controller: _nameController,
+                              label: 'Full Name',
+                              hint: 'Enter your full name',
+                              icon: Icons.person,
+                            ),
+                            const SizedBox(height: 20),
+
+                            _buildTextField(
+                              controller: _emailController,
+                              label: 'Email Address',
+                              hint: 'Enter your email',
+                              icon: Icons.email,
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            const SizedBox(height: 20),
+
+                            _buildTextField(
+                              controller: _passwordController,
+                              label: 'Password',
+                              hint: 'Create a password',
+                              icon: Icons.lock,
+                              isPassword: true,
+                              isPasswordVisible: _isPasswordVisible,
+                              onPasswordToggle: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 20),
+
+                            _buildTextField(
+                              controller: _confirmPasswordController,
+                              label: 'Confirm Password',
+                              hint: 'Confirm your password',
+                              icon: Icons.lock_outline,
+                              isPassword: true,
+                              isPasswordVisible: _isConfirmPasswordVisible,
+                              onPasswordToggle: () {
+                                setState(() {
+                                  _isConfirmPasswordVisible =
+                                  !_isConfirmPasswordVisible;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 25),
+
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: Checkbox(
+                                    value: _agreeToTerms,
+                                    onChanged: (v) {
+                                      setState(() => _agreeToTerms = v ?? false);
+                                    },
+                                    fillColor: MaterialStateProperty.resolveWith(
+                                          (states) {
+                                        if (states.contains(MaterialState.selected)) {
+                                          return const Color(0xFFE91E63);
+                                        }
+                                        return Colors.white.withOpacity(0.3);
+                                      },
+                                    ),
+                                    side: BorderSide(
+                                      color: Colors.white.withOpacity(0.5),
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(
+                                    "I agree to the Terms of Service and Privacy Policy",
+                                    style: TextStyle(
+                                      color: Colors.white.withOpacity(0.9),
+                                      fontSize: 12,
+                                      height: 1.4,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 30),
+
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: _agreeToTerms ? _createAccount : null,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFE91E63),
+                                  disabledBackgroundColor:
+                                  Colors.grey.withOpacity(0.3),
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 0,
+                                ),
+                                child: const Text(
+                                  'Submit',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 40),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// CUSTOM TEXT FIELD WIDGET
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+    required IconData icon,
+    TextInputType? keyboardType,
+    bool isPassword = false,
+    bool isPasswordVisible = false,
+    VoidCallback? onPasswordToggle,
+  }) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = screenWidth >= 768;
+    final isSmallScreen = screenWidth < 360;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: isTablet ? 16 : 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.2),
+              width: 1,
+            ),
+          ),
+          child: TextField(
+            controller: controller,
+            obscureText: isPassword && !isPasswordVisible,
+            keyboardType: keyboardType,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: isTablet ? 18 : 16,
+            ),
+            decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: TextStyle(
+                color: Colors.white.withOpacity(0.5),
+                fontSize: 14,
+              ),
+              prefixIcon: Icon(
+                icon,
+                color: Colors.white.withOpacity(0.7),
+              ),
+              suffixIcon: isPassword
+                  ? IconButton(
+                icon: Icon(
+                  isPasswordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                  color: Colors.white.withOpacity(0.7),
+                ),
+                onPressed: onPasswordToggle,
+              )
+                  : null,
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 16,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _createAccount() {
+    if (_nameController.text.trim().isEmpty) {
+      _showError('Please enter your full name');
+      return;
+    }
+
+    if (_emailController.text.trim().isEmpty ||
+        !_emailController.text.contains('@')) {
+      _showError('Please enter a valid email address');
+      return;
+    }
+
+    if (_passwordController.text.length < 6) {
+      _showError('Password must be at least 6 characters');
+      return;
+    }
+
+    if (_passwordController.text != _confirmPasswordController.text) {
+      _showError('Passwords do not match');
+      return;
+    }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const MainNavigation()),
+    );
+  }
+
+  void _showError(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+}
