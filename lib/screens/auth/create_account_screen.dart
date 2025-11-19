@@ -16,11 +16,9 @@ class CreateAccountScreen extends StatefulWidget {
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
 
-  bool _isPasswordVisible = false;
-  bool _isConfirmPasswordVisible = false;
+  String? _selectedGender;
   bool _agreeToTerms = false;
 
   @override
@@ -118,34 +116,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             const SizedBox(height: 20),
 
                             _buildTextField(
-                              controller: _passwordController,
-                              label: 'Password',
-                              hint: 'Create a password',
-                              icon: Icons.lock,
-                              isPassword: true,
-                              isPasswordVisible: _isPasswordVisible,
-                              onPasswordToggle: () {
-                                setState(() {
-                                  _isPasswordVisible = !_isPasswordVisible;
-                                });
-                              },
+                              controller: _cityController,
+                              label: 'City',
+                              hint: 'Enter your city name',
+                              icon: Icons.location_city,
                             ),
                             const SizedBox(height: 20),
 
-                            _buildTextField(
-                              controller: _confirmPasswordController,
-                              label: 'Confirm Password',
-                              hint: 'Confirm your password',
-                              icon: Icons.lock_outline,
-                              isPassword: true,
-                              isPasswordVisible: _isConfirmPasswordVisible,
-                              onPasswordToggle: () {
-                                setState(() {
-                                  _isConfirmPasswordVisible =
-                                  !_isConfirmPasswordVisible;
-                                });
-                              },
-                            ),
+                            _buildGenderDropdown(),
                             const SizedBox(height: 25),
 
                             Row(
@@ -305,6 +283,75 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     );
   }
 
+  Widget _buildGenderDropdown() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = screenWidth >= 768;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Gender',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: isTablet ? 16 : 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.2),
+              width: 1,
+            ),
+          ),
+          child: DropdownButtonFormField<String>(
+            value: _selectedGender,
+            dropdownColor: const Color(0xFF2F1518),
+            decoration: InputDecoration(
+              hintText: 'Select your gender',
+              hintStyle: TextStyle(
+                color: Colors.white.withOpacity(0.5),
+                fontSize: 14,
+              ),
+              prefixIcon: Icon(
+                Icons.person_outline,
+                color: Colors.white.withOpacity(0.7),
+              ),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 16,
+              ),
+            ),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: isTablet ? 18 : 16,
+            ),
+            icon: Icon(
+              Icons.arrow_drop_down,
+              color: Colors.white.withOpacity(0.7),
+            ),
+            items: ['Male', 'Female', 'Other'].map((String gender) {
+              return DropdownMenuItem<String>(
+                value: gender,
+                child: Text(gender),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedGender = newValue;
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
   void _createAccount() {
     if (_nameController.text.trim().isEmpty) {
       _showError('Please enter your full name');
@@ -317,13 +364,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       return;
     }
 
-    if (_passwordController.text.length < 6) {
-      _showError('Password must be at least 6 characters');
+    if (_cityController.text.trim().isEmpty) {
+      _showError('Please enter your city name');
       return;
     }
 
-    if (_passwordController.text != _confirmPasswordController.text) {
-      _showError('Passwords do not match');
+    if (_selectedGender == null) {
+      _showError('Please select your gender');
       return;
     }
 
@@ -347,8 +394,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
+    _cityController.dispose();
     super.dispose();
   }
 }
