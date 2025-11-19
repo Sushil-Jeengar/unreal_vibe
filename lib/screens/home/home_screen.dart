@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:unreal_vibe/screens/home/widgets/event_card.dart';
 import 'package:unreal_vibe/screens/home/widgets/search_bar.dart';
 import '../../models/event_model.dart';
+import '../explore/event_details_screen.dart';
 
 import 'package:intl/intl.dart';
 
@@ -14,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final List<Event> events = Event.getMockEvents();
-  final List<String> filterTags = ['All', 'Music', 'Festival']; // Updated filters
+  final List<String> filterTags = ['All', 'Music', 'Favorite'];
   String selectedFilter = 'All';
 
   @override
@@ -25,21 +26,30 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.black,
       appBar: _buildAppBar(),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeroSection(),
-              const SizedBox(height: 24),
-              const CustomSearchBar(),
-              const SizedBox(height: 32),
-              _buildTrendingEvents(trendingEvents),
-              const SizedBox(height: 32),
-              _buildAllEvents(),
-              const SizedBox(height: 100), // Space for bottom navigation
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+                  _buildHeroSection(),
+                  const SizedBox(height: 20),
+                  const CustomSearchBar(),
+                ],
+              ),
+            ),
+            const SizedBox(height: 28),
+            _buildTrendingEvents(trendingEvents),
+            const SizedBox(height: 32),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: _buildAllEvents(),
+            ),
+            const SizedBox(height: 100),
+          ],
         ),
       ),
     );
@@ -87,9 +97,10 @@ class _HomeScreenState extends State<HomeScreen> {
         RichText(
           text: TextSpan(
             style: const TextStyle(
-              fontSize: 28,
+              fontSize: 32,
               fontWeight: FontWeight.bold,
               height: 1.2,
+              letterSpacing: -0.5,
             ),
             children: [
               const TextSpan(
@@ -99,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const TextSpan(
                 text: 'VIBE.\n',
                 style: TextStyle(
-                  color: Color(0xFFFFD700), // Yellow
+                  color: Color(0xFFFFD700),
                 ),
               ),
               const TextSpan(
@@ -109,19 +120,19 @@ class _HomeScreenState extends State<HomeScreen> {
               const TextSpan(
                 text: 'MUSIC.',
                 style: TextStyle(
-                  color: Color(0xFF6958CA), // Purple
+                  color: Color(0xFF6958CA),
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
         Text(
-          'Discover unforgettable events and create your own.',
+          'Discover unforgettable events and create\nyour own.',
           style: TextStyle(
-            color: Colors.white.withOpacity(0.8),
-            fontSize: 14,
-            height: 1.4,
+            color: Colors.grey[500],
+            fontSize: 13,
+            height: 1.5,
           ),
         ),
       ],
@@ -132,59 +143,51 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Trending Events',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextButton(
-              onPressed: () {},
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              child: const Text(
-                'See all',
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Trending Events',
                 style: TextStyle(
-                  color: Color(0xFF6958CA),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-            ),
-          ],
+              TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: const Text(
+                  'See all',
+                  style: TextStyle(
+                    color: Color(0xFF6958CA),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         SizedBox(
           height: 280,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.only(left: 16, right: 4),
             itemCount: events.length,
             itemBuilder: (context, index) {
               final event = events[index];
               return Container(
-                width: 260,
-                margin: const EdgeInsets.only(
-                  right: 16,
-                  bottom: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1E1E1E),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+                width: 240,
+                margin: EdgeInsets.only(
+                  right: index < events.length - 1 ? 12 : 0,
                 ),
                 child: EventCard(
                   title: event.title,
@@ -195,6 +198,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   imageUrl: event.imageUrl,
                   tags: event.tags,
                   isHorizontal: true,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EventDetailsScreen(event: event),
+                      ),
+                    );
+                  },
                 ),
               );
             },
@@ -217,13 +228,13 @@ class _HomeScreenState extends State<HomeScreen> {
           'All Events',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         SizedBox(
-          height: 40,
+          height: 36,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: filterTags.length,
@@ -237,19 +248,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   });
                 },
                 child: Container(
-                  margin: const EdgeInsets.only(right: 12),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  margin: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: isSelected ? const Color(0xFF6958CA) : const Color(0xFF2A2A2A),
-                    borderRadius: BorderRadius.circular(20),
-                    border: isSelected ? null : Border.all(color: const Color(0xFF3A3A3A)),
+                    color: isSelected ? const Color(0xFF6958CA) : const Color(0xFF1A1A1A),
+                    borderRadius: BorderRadius.circular(18),
                   ),
-                  child: Text(
-                    tag,
-                    style: TextStyle(
-                      color: isSelected ? Colors.white : Colors.grey[400],
-                      fontSize: 14,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                  child: Center(
+                    child: Text(
+                      tag,
+                      style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.grey[500],
+                        fontSize: 13,
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
@@ -261,22 +273,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.only(bottom: 8),  // Added bottom padding
           itemCount: filteredEvents.length,
           itemBuilder: (context, index) {
             final event = filteredEvents[index];
             return Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              decoration: BoxDecoration(
-                color: const Color(0xFF1E1E1E),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
+              margin: const EdgeInsets.only(bottom: 12),
               child: EventCard(
                 title: event.title,
                 subtitle: event.subtitle,
@@ -286,6 +288,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 imageUrl: event.imageUrl,
                 tags: event.tags,
                 isHorizontal: false,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EventDetailsScreen(event: event),
+                    ),
+                  );
+                },
               ),
             );
           },

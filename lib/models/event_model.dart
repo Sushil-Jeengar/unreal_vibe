@@ -8,6 +8,25 @@ class Event {
   final String imageUrl;
   final List<String> tags;
   final bool isTrending;
+  final String? djName;
+  final String? djImage;
+  final double? rating;
+  final int? ratingCount;
+  final String? time;
+  final String? ageRestriction;
+  final String? dressCode;
+  final String? entryFee;
+  final List<String>? galleryImages;
+  final String? aboutParty;
+  final String? partyFlow;
+  final String? thingsToKnow;
+  final String? partyEtiquette;
+  final String? whatsIncluded;
+  final String? houseRules;
+  final String? howItWorks;
+  final String? cancellationPolicy;
+  final int? partiesHosted;
+  final String? hostName;
 
   Event({
     required this.id,
@@ -19,6 +38,25 @@ class Event {
     required this.imageUrl,
     required this.tags,
     this.isTrending = false,
+    this.djName,
+    this.djImage,
+    this.rating,
+    this.ratingCount,
+    this.time,
+    this.ageRestriction,
+    this.dressCode,
+    this.entryFee,
+    this.galleryImages,
+    this.aboutParty,
+    this.partyFlow,
+    this.thingsToKnow,
+    this.partyEtiquette,
+    this.whatsIncluded,
+    this.houseRules,
+    this.howItWorks,
+    this.cancellationPolicy,
+    this.partiesHosted,
+    this.hostName,
   });
 
   static List<Event> getMockEvents() {

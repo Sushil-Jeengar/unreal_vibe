@@ -9,6 +9,7 @@ class EventCard extends StatelessWidget {
   final String imageUrl;
   final List<String> tags;
   final bool isHorizontal;
+  final VoidCallback? onTap;
 
   const EventCard({
     Key? key,
@@ -20,6 +21,7 @@ class EventCard extends StatelessWidget {
     required this.imageUrl,
     required this.tags,
     this.isHorizontal = false,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -32,116 +34,84 @@ class EventCard extends StatelessWidget {
   }
 
   Widget _buildHorizontalCard() {
-    return Container(
-      width: 260,
-      margin: const EdgeInsets.only(right: 16),
-      decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildImageHeader(isHorizontal: true),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 2),
-                if (subtitle != null && subtitle!.isNotEmpty) ...[
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1A1A),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildImageHeader(isHorizontal: true),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    subtitle!,
-                    style: TextStyle(
-                      color: Colors.grey[400],
-                      fontSize: 11,
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 4),
+                  _buildEventDetails(),
+                  const SizedBox(height: 4),
+                  _buildCardFooter(),
                 ],
-                _buildEventDetails(),
-                const SizedBox(height: 2),
-                _buildCardFooter(),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildVerticalCard() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildImageHeader(isHorizontal: false),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                if (subtitle != null && subtitle!.isNotEmpty) ...[
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1A1A),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildImageHeader(isHorizontal: false),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
                   Text(
-                    subtitle!,
-                    style: TextStyle(
-                      color: Colors.grey[400],
-                      fontSize: 14,
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      height: 1.2,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
+                  _buildEventDetails(),
+                  const SizedBox(height: 10),
+                  _buildCardFooter(),
                 ],
-                _buildEventDetails(),
-                const SizedBox(height: 16),
-                _buildCardFooter(),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -150,28 +120,29 @@ class EventCard extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          height: isHorizontal ? 120 : 200,
+          height: isHorizontal ? 140 : 180,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
             ),
             image: DecorationImage(
               image: NetworkImage(imageUrl),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.3),
+                Colors.black.withOpacity(0.2),
                 BlendMode.darken,
               ),
             ),
           ),
         ),
         Positioned(
-          top: 8,
-          left: 8,
+          top: 10,
+          left: 10,
           child: Wrap(
             spacing: 6,
+            runSpacing: 6,
             children: tags.take(2).map((tag) => _buildTag(tag)).toList(),
           ),
         ),
@@ -182,31 +153,34 @@ class EventCard extends StatelessWidget {
   Widget _buildTag(String tag) {
     Color tagColor;
     if (tag.toUpperCase().contains('HOUSE')) {
-      tagColor = Colors.purple;
+      tagColor = const Color(0xFF6958CA);
     } else if (tag.toUpperCase().contains('AGE')) {
-      tagColor = Colors.red;
+      tagColor = const Color(0xFFFF6B6B);
     } else if (tag.toUpperCase().contains('MUSIC')) {
-      tagColor = Colors.blue;
+      tagColor = const Color(0xFF4ECDC4);
     } else if (tag.toUpperCase().contains('FESTIVAL')) {
-      tagColor = Colors.green;
+      tagColor = const Color(0xFF95E1D3);
     } else if (tag.toUpperCase().contains('JAZZ')) {
-      tagColor = Colors.orange;
+      tagColor = const Color(0xFFFFB347);
+    } else if (tag.toUpperCase().contains('NEW')) {
+      tagColor = const Color(0xFFFFB347);
     } else {
-      tagColor = Colors.grey;
+      tagColor = const Color(0xFF6958CA);
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: tagColor,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
-        tag,
+        tag.toUpperCase(),
         style: const TextStyle(
           color: Colors.white,
-          fontSize: 10,
-          fontWeight: FontWeight.w600,
+          fontSize: 9,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.5,
         ),
       ),
     );
@@ -218,28 +192,28 @@ class EventCard extends StatelessWidget {
       children: [
         Row(
           children: [
-            Icon(Icons.calendar_today, size: 12, color: Colors.grey[400]),
-            const SizedBox(width: 3),
+            Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey[500]),
+            const SizedBox(width: 6),
             Text(
               date,
               style: TextStyle(
                 color: Colors.grey[400],
-                fontSize: 11,
+                fontSize: 12,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 6),
         Row(
           children: [
-            Icon(Icons.location_on, size: 12, color: Colors.grey[400]),
-            const SizedBox(width: 3),
+            Icon(Icons.location_on_outlined, size: 14, color: Colors.grey[500]),
+            const SizedBox(width: 6),
             Expanded(
               child: Text(
                 location,
                 style: TextStyle(
                   color: Colors.grey[400],
-                  fontSize: 11,
+                  fontSize: 12,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -255,30 +229,83 @@ class EventCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          'Cover: $coverCharge',
-          style: TextStyle(
-            color: Colors.grey[400],
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
+        Row(
+          children: [
+            _buildAttendeeAvatars(),
+            const SizedBox(width: 8),
+            Text(
+              '+42',
+              style: TextStyle(
+                color: Colors.grey[400],
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.blue[600],
-            borderRadius: BorderRadius.circular(12),
+            color: const Color(0xFF6958CA),
+            borderRadius: BorderRadius.circular(8),
           ),
           child: const Text(
-            'Book Now',
+            'View Details',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildAttendeeAvatars() {
+    return SizedBox(
+      width: 60,
+      height: 24,
+      child: Stack(
+        children: [
+          Positioned(
+            left: 0,
+            child: Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                color: Colors.blue[300],
+                shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFF1A1A1A), width: 2),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 18,
+            child: Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                color: Colors.pink[300],
+                shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFF1A1A1A), width: 2),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 36,
+            child: Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                color: Colors.green[300],
+                shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFF1A1A1A), width: 2),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

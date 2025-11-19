@@ -15,11 +15,9 @@ class CustomSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.grey[800],
-        borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: Colors.grey[700]!),
+        color: const Color(0xFF1A1A1A),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(
         controller: controller,
@@ -27,22 +25,23 @@ class CustomSearchBar extends StatelessWidget {
         onTap: onTap,
         style: const TextStyle(
           color: Colors.white,
-          fontSize: 16,
+          fontSize: 14,
         ),
         decoration: InputDecoration(
           hintText: 'Search events...',
           hintStyle: TextStyle(
-            color: Colors.grey[500],
-            fontSize: 16,
+            color: Colors.grey[600],
+            fontSize: 14,
           ),
           prefixIcon: Icon(
             Icons.search,
-            color: Colors.grey[500],
+            color: Colors.grey[600],
+            size: 20,
           ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 14,
+            horizontal: 16,
+            vertical: 12,
           ),
         ),
       ),
