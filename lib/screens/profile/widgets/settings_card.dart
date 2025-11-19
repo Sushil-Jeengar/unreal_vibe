@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../providers/user_provider.dart';
 
 class SettingsCard extends StatelessWidget {
   const SettingsCard({Key? key}) : super(key: key);
@@ -14,21 +16,64 @@ class SettingsCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _buildSettingsItem(Icons.edit, 'Edit Profile', () {}),
+          _buildSettingsItem(context, Icons.edit, 'Edit Profile', () {}),
           _buildDivider(),
-          _buildSettingsItem(Icons.lock, 'Privacy', () {}),
+          _buildSettingsItem(context, Icons.lock, 'Privacy', () {}),
           _buildDivider(),
-          _buildSettingsItem(Icons.notifications, 'Notifications', () {}),
+          _buildSettingsItem(context, Icons.notifications, 'Notifications', () {}),
           _buildDivider(),
-          _buildSettingsItem(Icons.lock_clock, 'Change Password', () {}),
+          _buildSettingsItem(context, Icons.lock_clock, 'Change Password', () {}),
           _buildDivider(),
-          _buildSettingsItem(Icons.logout, 'Logout', () {}, isDestructive: true),
+          _buildSettingsItem(
+            context,
+            Icons.logout,
+            'Logout',
+            () => _handleLogout(context),
+            isDestructive: true,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildSettingsItem(IconData icon, String title, VoidCallback onTap, {bool isDestructive = false}) {
+  Future<void> _handleLogout(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1A1A1A),
+        title: const Text(
+          'Logout',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: const Text(
+          'Are you sure you want to logout?',
+          style: TextStyle(color: Colors.white70),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && context.mounted) {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      await userProvider.logoutUser();
+
+      if (context.mounted) {
+        Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+      }
+    }
+  }
+
+  Widget _buildSettingsItem(BuildContext context, IconData icon, String title, VoidCallback onTap, {bool isDestructive = false}) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),

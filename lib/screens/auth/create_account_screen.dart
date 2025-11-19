@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../navigation/main_navigation.dart';
+import '../../providers/user_provider.dart';
+import '../../models/user_model.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   final String phoneNumber;
@@ -352,7 +355,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     );
   }
 
-  void _createAccount() {
+  Future<void> _createAccount() async {
+    // Validate inputs
     if (_nameController.text.trim().isEmpty) {
       _showError('Please enter your full name');
       return;
@@ -374,10 +378,54 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       return;
     }
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const MainNavigation()),
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(color: Colors.white),
+      ),
     );
+
+    // Create user object
+    final user = User(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      name: _nameController.text.trim(),
+      email: _emailController.text.trim(),
+      phoneNumber: widget.phoneNumber,
+      city: _cityController.text.trim(),
+      gender: _selectedGender!,
+    );
+
+    try {
+      // Get UserProvider
+      final userProvider = context.read<UserProvider>();
+      
+      // Save user data
+      await userProvider.loginUser(user);
+
+      // Close loading dialog
+      if (!mounted) return;
+      Navigator.pop(context);
+
+      // Navigate to main screen
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MainNavigation()),
+      );
+    } catch (e, stackTrace) {
+      // Log the actual error for debugging
+      debugPrint('❌ Error creating account: $e');
+      debugPrint('Stack trace: $stackTrace');
+      
+      // Close loading dialog
+      if (mounted) Navigator.pop(context);
+      
+      // Show error message
+      if (!mounted) return;
+      _showError('Error: ${e.toString()}');
+    }
   }
 
   void _showError(String msg) {
