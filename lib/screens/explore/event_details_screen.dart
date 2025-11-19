@@ -43,7 +43,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     _buildDJSection(context),
                     _buildEventInfo(context),
                     _buildActionButtons(context),
-                    _buildEventGallery(context),
+                    // _buildEventGallery(context),
                     _buildAboutSection(context),
                     _buildPartyFlow(context),
                     _buildThingsToKnow(context),
@@ -335,45 +335,45 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     );
   }
 
-  Widget _buildEventGallery(BuildContext context) {
-    final galleryImages = widget.event.galleryImages ?? [];
-    final padding = ResponsiveHelper.getResponsivePadding(context, 16.0);
-    final galleryHeight = ResponsiveHelper.isDesktop(context) ? 150.0 : 120.0;
-    
-    return Padding(
-      padding: EdgeInsets.all(padding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Event Gallery',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: ResponsiveHelper.getResponsiveFontSize(context, 18),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            height: galleryHeight,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: galleryImages.isEmpty ? 3 : galleryImages.length + 1,
-              itemBuilder: (context, index) {
-                if (galleryImages.isEmpty) {
-                  return _buildGalleryPlaceholder(index);
-                }
-                if (index < galleryImages.length) {
-                  return _buildGalleryImage(galleryImages[index]);
-                }
-                return _buildMoreImagesCard();
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildEventGallery(BuildContext context) {
+  //   final galleryImages = widget.event.galleryImages ?? [];
+  //   final padding = ResponsiveHelper.getResponsivePadding(context, 16.0);
+  //   final galleryHeight = ResponsiveHelper.isDesktop(context) ? 150.0 : 120.0;
+  //
+  //   return Padding(
+  //     padding: EdgeInsets.all(padding),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text(
+  //           'Event Gallery',
+  //           style: TextStyle(
+  //             color: Colors.white,
+  //             fontSize: ResponsiveHelper.getResponsiveFontSize(context, 18),
+  //             fontWeight: FontWeight.bold,
+  //           ),
+  //         ),
+  //         const SizedBox(height: 12),
+  //         SizedBox(
+  //           height: galleryHeight,
+  //           child: ListView.builder(
+  //             scrollDirection: Axis.horizontal,
+  //             itemCount: galleryImages.isEmpty ? 3 : galleryImages.length + 1,
+  //             itemBuilder: (context, index) {
+  //               if (galleryImages.isEmpty) {
+  //                 return _buildGalleryPlaceholder(index);
+  //               }
+  //               if (index < galleryImages.length) {
+  //                 return _buildGalleryImage(galleryImages[index]);
+  //               }
+  //               return _buildMoreImagesCard();
+  //             },
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildGalleryPlaceholder(int index) {
     return Container(

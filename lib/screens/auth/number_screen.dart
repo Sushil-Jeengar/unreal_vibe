@@ -40,7 +40,6 @@ class _NumberScreenState extends State<NumberScreen> {
             child: Column(
               children: [
                 Expanded(flex: 3, child: Container()),
-
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
@@ -77,7 +76,6 @@ class _NumberScreenState extends State<NumberScreen> {
                             ),
                           ),
                           const SizedBox(height: 25),
-
                           Container(
                             decoration: BoxDecoration(
                               color: Colors.white.withOpacity(0.15),
@@ -136,11 +134,11 @@ class _NumberScreenState extends State<NumberScreen> {
                                 required currentLength,
                                 required isFocused,
                                 maxLength,
-                              }) => null,
+                              }) =>
+                                  null,
                             ),
                           ),
                           const SizedBox(height: 15),
-
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -154,14 +152,14 @@ class _NumberScreenState extends State<NumberScreen> {
                                       _isChecked = value ?? false;
                                     });
                                   },
-                                  fillColor: MaterialStateProperty.resolveWith<Color>((
-                                    Set<MaterialState> states,
-                                  ) {
-                                    if (states.contains(MaterialState.selected)) {
-                                      return Color(0xFFE91E63); // Pink
-                                    }
-                                    return Colors.white.withOpacity(0.3);
-                                  }),
+                                  fillColor: MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                                      if (states.contains(MaterialState.selected)) {
+                                        return Color(0xFFE91E63); // Pink
+                                      }
+                                      return Colors.white.withOpacity(0.3);
+                                    },
+                                  ),
                                   side: BorderSide(
                                     color: Colors.white.withOpacity(0.5),
                                     width: 1.5,
@@ -174,11 +172,11 @@ class _NumberScreenState extends State<NumberScreen> {
                               const SizedBox(width: 10),
                               Expanded(
                                 child: Text(
-                                  'I agree to the terms and conditions to log into the app',
+                                  'I agree to the Terms and Conditions to continue',
                                   style: TextStyle(
                                     color: Colors.white.withOpacity(0.9),
                                     fontSize: 12,
-                                    height: 1.4,
+                                    height: 2.1,
                                   ),
                                 ),
                               ),
@@ -186,7 +184,7 @@ class _NumberScreenState extends State<NumberScreen> {
                           ),
                         ],
                       ),
-
+                      const SizedBox(height: 20), // Added bottom padding
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -194,16 +192,7 @@ class _NumberScreenState extends State<NumberScreen> {
                               ? () {
                                   if (_phoneController.text.length == 10) {
                                     // Generate random 4-digit OTP
-                                    String otp =
-                                        (1000 +
-                                                (9000 *
-                                                        (DateTime.now()
-                                                                .millisecondsSinceEpoch %
-                                                            10000) /
-                                                        10000)
-                                                    .floor())
-                                            .toString();
-
+                                    String otp = (1000 + (9000 * (DateTime.now().millisecondsSinceEpoch % 10000) / 10000).floor()).toString();
                                     // Navigate to OTP screen
                                     Navigator.push(
                                       context,

@@ -19,7 +19,7 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   final List<TextEditingController> _otpControllers = List.generate(
     4,
-    (index) => TextEditingController(),
+        (index) => TextEditingController(),
   );
   final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
   String _timerText = '00:30';
@@ -107,6 +107,16 @@ class _OtpScreenState extends State<OtpScreen> {
         }
       });
       _startTimer();
+      _showOtpPopup();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('OTP resent successfully'),
+          backgroundColor: Color(0xFFE91E63),
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
@@ -143,10 +153,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0,
-                    vertical: 30.0,
-                  ),
+                  padding: const EdgeInsets.fromLTRB(24.0, 30.0, 24.0, 40.0),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -163,132 +170,147 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Verify OTP',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            '4-digit code was sent to $maskedNumber',
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.7),
-                              fontSize: 13,
-                            ),
-                          ),
-                          const SizedBox(height: 30),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: List.generate(
-                              4,
-                              (index) => Container(
-                                width: 65,
-                                height: 65,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.15),
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color:
-                                        _otpControllers[index].text.isNotEmpty
-                                        ? Color(0xFFE91E63)
-                                        : Colors.white.withOpacity(0.2),
-                                    width:
-                                        _otpControllers[index].text.isNotEmpty
-                                        ? 2
-                                        : 1,
-                                  ),
-                                ),
-                                child: TextField(
-                                  controller: _otpControllers[index],
-                                  focusNode: _focusNodes[index],
-                                  textAlign: TextAlign.center,
-                                  textAlignVertical: TextAlignVertical.center,
-                                  keyboardType: TextInputType.number,
-                                  maxLength: 1,
-                                  maxLines: 1,
-                                  minLines: 1,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.0,
-                                  ),
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  decoration: InputDecoration(
-                                    counterText: '',
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.zero,
-                                    isDense: true,
-                                    isCollapsed: true,
-                                  ),
-                                  onChanged: (value) {
-                                    setState(
-                                      () {},
-                                    ); // Rebuild to update border color
-                                    if (value.length == 1) {
-                                      if (index < 3) {
-                                        _focusNodes[index + 1].requestFocus();
-                                      } else {
-                                        _focusNodes[index].unfocus();
-                                      }
-                                    } else if (value.isEmpty && index > 0) {
-                                      _focusNodes[index - 1].requestFocus();
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 25),
-
-                          Center(
-                            child: GestureDetector(
-                              onTap: _resendOTP,
-                              child: RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'Resend OTP ',
-                                      style: TextStyle(
-                                        color: _isResendEnabled
-                                            ? Color(0xFFE91E63)
-                                            : Colors.white.withOpacity(0.6),
-                                        fontSize: 14,
-                                        fontWeight: _isResendEnabled
-                                            ? FontWeight.w600
-                                            : FontWeight.normal,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: _timerText,
-                                      style: TextStyle(
-                                        color: _isResendEnabled
-                                            ? Color(0xFFE91E63)
-                                            : Colors.white.withOpacity(0.8),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                      const Text(
+                        'Verify OTP',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '4-digit code was sent to $maskedNumber',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.7),
+                          fontSize: 13,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: List.generate(
+                          4,
+                              (index) => Container(
+                            width: 65,
+                            height: 65,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color:
+                                _otpControllers[index].text.isNotEmpty
+                                    ? Color(0xFFE91E63)
+                                    : Colors.white.withOpacity(0.2),
+                                width:
+                                _otpControllers[index].text.isNotEmpty
+                                    ? 2
+                                    : 1,
+                              ),
+                            ),
+                            child: TextField(
+                              controller: _otpControllers[index],
+                              focusNode: _focusNodes[index],
+                              textAlign: TextAlign.center,
+                              textAlignVertical: TextAlignVertical.center,
+                              keyboardType: TextInputType.number,
+                              maxLength: 1,
+                              maxLines: 1,
+                              minLines: 1,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                height: 1.0,
+                              ),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              decoration: InputDecoration(
+                                counterText: '',
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.zero,
+                                isDense: true,
+                                isCollapsed: true,
+                              ),
+                              onChanged: (value) {
+                                setState(
+                                      () {},
+                                ); // Rebuild to update border color
+                                if (value.length == 1) {
+                                  if (index < 3) {
+                                    _focusNodes[index + 1].requestFocus();
+                                  } else {
+                                    _focusNodes[index].unfocus();
+                                  }
+                                } else if (value.isEmpty && index > 0) {
+                                  _focusNodes[index - 1].requestFocus();
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      Center(
+                        child: TextButton(
+                          onPressed: _isResendEnabled ? _resendOTP : null,
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 12,
+                            ),
+                            backgroundColor: _isResendEnabled
+                                ? Color(0xFFE91E63).withOpacity(0.2)
+                                : Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: BorderSide(
+                                color: _isResendEnabled
+                                    ? Color(0xFFE91E63)
+                                    : Colors.white.withOpacity(0.3),
+                                width: 1.5,
+                              ),
+                            ),
+                          ),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Resend OTP ',
+                                  style: TextStyle(
+                                    color: _isResendEnabled
+                                        ? Color(0xFFE91E63)
+                                        : Colors.white.withOpacity(0.6),
+                                    fontSize: 15,
+                                    fontWeight: _isResendEnabled
+                                        ? FontWeight.w600
+                                        : FontWeight.normal,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: _timerText,
+                                  style: TextStyle(
+                                    color: _isResendEnabled
+                                        ? Color(0xFFE91E63)
+                                        : Colors.white.withOpacity(0.8),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 30),
 
                       SizedBox(
                         width: double.infinity,

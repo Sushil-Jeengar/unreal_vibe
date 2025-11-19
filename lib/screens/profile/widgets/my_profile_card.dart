@@ -25,65 +25,59 @@ class MyProfileCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          _buildProfileField('Bio/About Me', 'Tell people about yourself...'),
-          _buildProfileField('Fun Fact About Me', 'Share something interesting!'),
-          const SizedBox(height: 16),
-          const Text(
-            'Vibe/Interests',
-            style: TextStyle(
-              color: Color(0xFF9CA3AF),
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          _buildProfileItem(Icons.person, 'Bio/About Me', 'Tell people about yourself...', () {}),
           const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _buildInterestTag('Music'),
-              _buildInterestTag('Travel'),
-              _buildInterestTag('Photography'),
-              _buildInterestTag('Food'),
-              _buildInterestTag('Art'),
-            ],
-          ),
-          const SizedBox(height: 16),
-          _buildProfileField('Dream Travel Destination', 'Where do you want to go?'),
+          _buildProfileItem(Icons.emoji_emotions, 'Fun Fact About Me', 'Share something interesting!', () {}),
         ],
       ),
     );
   }
 
-  Widget _buildProfileField(String label, String hint) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Color(0xFF9CA3AF),
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: const Color(0xFF0A0A0A),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFF2A2A2A)),
-          ),
-          child: Text(
-            hint,
-            style: const TextStyle(
-              color: Color(0xFF6B7280),
-              fontSize: 14,
+  Widget _buildProfileItem(IconData icon, String title, String subtitle, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: const Color(0xFF6366F1),
+              size: 24,
             ),
-          ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Color(0xFF6B7280),
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: const Color(0xFF9CA3AF),
+              size: 16,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
