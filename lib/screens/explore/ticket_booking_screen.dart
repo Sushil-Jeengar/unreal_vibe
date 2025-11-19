@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../utils/responsive_helper.dart';
 import '../../models/event_model.dart';
+import '../../screens/home/widgets/bottom_navigation.dart';
+import '../../screens/home/home_screen.dart';
+import '../../screens/explore/explore_screen.dart';
+import '../../screens/explore/create_screen.dart';
+import '../../screens/ticket/tickets_screen.dart';
+import '../../screens/profile/profile_screen.dart';
 import 'payment_gateway_screen.dart';
 
 class TicketBookingScreen extends StatefulWidget {
@@ -532,72 +538,47 @@ class _TicketBookingScreenState extends State<TicketBookingScreen> {
   }
 
   Widget _buildBottomNavigationBar() {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFF0A0A0F),
-        border: Border(
-          top: BorderSide(color: const Color(0xFF2E2740).withOpacity(0.3), width: 1),
-        ),
-      ),
-      child: BottomNavigationBar(
-        backgroundColor: const Color(0xFF0A0A0F),
-        selectedItemColor: const Color(0xFF7B5FFF),
-        unselectedItemColor: Colors.grey[600],
-        type: BottomNavigationBarType.fixed,
-        currentIndex: 2,
-        elevation: 0,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.home_outlined, size: 24),
-            ),
-            activeIcon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.home, size: 24),
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.search, size: 24),
-            ),
-            activeIcon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.search, size: 24),
-            ),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.confirmation_number_outlined, size: 24),
-            ),
-            activeIcon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.confirmation_number, size: 24),
-            ),
-            label: 'Tickets',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.person_outline, size: 24),
-            ),
-            activeIcon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.person, size: 24),
-            ),
-            label: 'Profile',
-          ),
-        ],
-        onTap: (index) {
-          // Handle navigation
-        },
-      ),
+    return CustomBottomNavigation(
+      currentIndex: 3, // Tickets tab is active
+      onTap: (index) {
+        switch (index) {
+          case 0: // Home
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+              (route) => false,
+            );
+            break;
+          case 1: // Explore
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const ExploreScreen()),
+              (route) => false,
+            );
+            break;
+          case 2: // Create
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const CreateScreen()),
+              (route) => false,
+            );
+            break;
+          case 3: // Tickets
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const TicketsScreen()),
+              (route) => false,
+            );
+            break;
+          case 4: // Profile
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+              (route) => false,
+            );
+            break;
+        }
+      },
     );
   }
 

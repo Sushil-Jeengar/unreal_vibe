@@ -8,14 +8,15 @@ import '../screens/profile/profile_screen.dart';
 import '../screens/home/widgets/bottom_navigation.dart';
 
 class MainNavigation extends StatefulWidget {
-  const MainNavigation({Key? key}) : super(key: key);
+  final int initialIndex;
+  const MainNavigation({Key? key, this.initialIndex = 0}) : super(key: key);
 
   @override
   State<MainNavigation> createState() => _MainNavigationState();
 }
 
 class _MainNavigationState extends State<MainNavigation> {
-  int _currentIndex = 0;
+  late int _currentIndex;
 
   final List<Widget> _screens = [
     const HomeScreen(),
@@ -24,6 +25,12 @@ class _MainNavigationState extends State<MainNavigation> {
     const TicketsScreen(),
     const ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
 
   void _onTabTapped(int index) {
     setState(() {

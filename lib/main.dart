@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screens/auth/splash_screen.dart';
 import 'providers/user_provider.dart';
+import 'navigation/main_navigation.dart';
 
 void main() {
   runApp(
@@ -34,6 +35,12 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: const SplashScreen(),
+      routes: {
+        '/main': (context) {
+          final int? initialIndex = ModalRoute.of(context)?.settings.arguments as int?;
+          return MainNavigation(initialIndex: initialIndex ?? 0);
+        },
+      },
     );
   }
 }

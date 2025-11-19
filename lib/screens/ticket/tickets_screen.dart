@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import '../../providers/user_provider.dart';
 
 class TicketsScreen extends StatefulWidget {
   const TicketsScreen({Key? key}) : super(key: key);
@@ -84,13 +86,17 @@ class _TicketsScreenState extends State<TicketsScreen> with TickerProviderStateM
                 size: 20,
               ),
               const SizedBox(width: 4),
-              const Text(
-                'Noida',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
+              Consumer<UserProvider>(
+                builder: (context, userProvider, child) {
+                  return Text(
+                    userProvider.user?.city ?? 'Location',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  );
+                },
               ),
             ],
           ),

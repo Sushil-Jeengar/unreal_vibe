@@ -30,9 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // Navigate based on login status
     if (userProvider.isLoggedIn && userProvider.user != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const MainNavigation()),
-      );
+      Navigator.of(context).pushReplacementNamed('/main');
     } else {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const OnboardingSlider()),

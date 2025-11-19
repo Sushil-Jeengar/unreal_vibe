@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../home/widgets/bottom_navigation.dart';
 import 'package:flutter/services.dart';
 import '../../utils/responsive_helper.dart';
+import '../ticket/tickets_screen.dart';
 
 class PaymentGatewayScreen extends StatefulWidget {
   final double totalAmount;
@@ -844,72 +846,27 @@ class _PaymentGatewayScreenState extends State<PaymentGatewayScreen> with Single
   }
 
   Widget _buildBottomNavigationBar() {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFF0A0A0F),
-        border: Border(
-          top: BorderSide(color: const Color(0xFF2E2740).withOpacity(0.3), width: 1),
-        ),
-      ),
-      child: BottomNavigationBar(
-        backgroundColor: const Color(0xFF0A0A0F),
-        selectedItemColor: const Color(0xFF7B5FFF),
-        unselectedItemColor: Colors.grey[600],
-        type: BottomNavigationBarType.fixed,
-        currentIndex: 2,
-        elevation: 0,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.home_outlined, size: 24),
-            ),
-            activeIcon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.home, size: 24),
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.search, size: 24),
-            ),
-            activeIcon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.search, size: 24),
-            ),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.confirmation_number_outlined, size: 24),
-            ),
-            activeIcon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.confirmation_number, size: 24),
-            ),
-            label: 'Tickets',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.person_outline, size: 24),
-            ),
-            activeIcon: Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Icon(Icons.person, size: 24),
-            ),
-            label: 'Profile',
-          ),
-        ],
-        onTap: (index) {
-          // Handle navigation
-        },
-      ),
+    return CustomBottomNavigation(
+      currentIndex: 3, // Tickets tab is active
+      onTap: (index) {
+        switch (index) {
+          case 0: // Home
+            Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+            break;
+          case 1: // Explore
+            Navigator.pushNamedAndRemoveUntil(context, '/explore', (route) => false);
+            break;
+          case 2: // Host
+            // Navigate to host/create event screen
+            Navigator.pushNamed(context, '/host');
+            break;
+          case 3: // Tickets - already here
+            break;
+          case 4: // Profile
+            Navigator.pushNamed(context, '/profile');
+            break;
+        }
+      },
     );
   }
 
@@ -1085,9 +1042,12 @@ class _PaymentGatewayScreenState extends State<PaymentGatewayScreen> with Single
                   ),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
+                      // Navigate to tickets screen - go back to main navigation and select tickets tab
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/main',
+                        (route) => false,
+                        arguments: 3, // Tickets tab index
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
@@ -1109,9 +1069,12 @@ class _PaymentGatewayScreenState extends State<PaymentGatewayScreen> with Single
                 const SizedBox(height: 12),
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
+                    // Navigate back to home - go back to main navigation and select home tab
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/main',
+                      (route) => false,
+                      arguments: 0, // Home tab index
+                    );
                   },
                   child: Text(
                     'Back to Home',
