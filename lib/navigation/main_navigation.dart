@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../utils/responsive_helper.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/explore/explore_screen.dart';
-import '../screens/explore/create_screen.dart';
+import '../screens/create/create_screen.dart';
 import '../screens/ticket/tickets_screen.dart';
 import '../screens/profile/profile_screen.dart';
-import '../screens/home/widgets/bottom_navigation.dart';
+import '../screens/home/bottom_navigation.dart';
 
 class MainNavigation extends StatefulWidget {
   final int initialIndex;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../home/widgets/bottom_navigation.dart';
+import '../home/bottom_navigation.dart';
 import 'package:flutter/services.dart';
 import '../../utils/responsive_helper.dart';
 import '../ticket/tickets_screen.dart';
