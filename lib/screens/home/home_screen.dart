@@ -249,50 +249,56 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'All Events',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: ResponsiveHelper.getResponsiveFontSize(context, 18),
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 36,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: filterTags.length,
-            itemBuilder: (context, index) {
-              final tag = filterTags[index];
-              final isSelected = selectedFilter == tag;
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedFilter = tag;
-                  });
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: isSelected ? const Color(0xFF6958CA) : const Color(0xFF1A1A1A),
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Center(
-                    child: Text(
-                      tag,
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.grey[500],
-                        fontSize: ResponsiveHelper.getResponsiveFontSize(context, 13),
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+        Row(
+          children: [
+            Text(
+              'All Events',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: ResponsiveHelper.getResponsiveFontSize(context, 18),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: SizedBox(
+                height: 36,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: filterTags.length,
+                  itemBuilder: (context, index) {
+                    final tag = filterTags[index];
+                    final isSelected = selectedFilter == tag;
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedFilter = tag;
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: isSelected ? const Color(0xFF6958CA) : const Color(0xFF1A1A1A),
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: Center(
+                          child: Text(
+                            tag,
+                            style: TextStyle(
+                              color: isSelected ? Colors.white : Colors.grey[500],
+                              fontSize: ResponsiveHelper.getResponsiveFontSize(context, 13),
+                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 16),
         isDesktop || isTablet

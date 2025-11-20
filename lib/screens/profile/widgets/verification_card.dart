@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../verify_profile_screen.dart';
 
 class VerificationCard extends StatelessWidget {
   const VerificationCard({Key? key}) : super(key: key);
@@ -134,27 +135,36 @@ class VerificationCard extends StatelessWidget {
   }
 
   Widget _buildCompleteVerificationButton() {
-    return Container(
-      width: double.infinity,
-      height: 48,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-        ),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
+    return Builder(
+      builder: (context) => Container(
+        width: double.infinity,
+        height: 48,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+          ),
           borderRadius: BorderRadius.circular(12),
-          onTap: () {},
-          child: const Center(
-            child: Text(
-              'Complete Verification',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const VerifyProfileScreen(),
+                ),
+              );
+            },
+            child: const Center(
+              child: Text(
+                'Complete Verification',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),

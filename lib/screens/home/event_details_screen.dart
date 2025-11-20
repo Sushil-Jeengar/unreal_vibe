@@ -40,7 +40,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildEventHeader(context),
-                    _buildDJSection(context),
+                    _buildHostedBy(context),
                     _buildEventInfo(context),
                     _buildActionButtons(context),
                     // _buildEventGallery(context),
@@ -49,7 +49,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     _buildThingsToKnow(context),
                     _buildExpandableSections(context),
                     _buildAllEvents(context),
-                    _buildHostedBy(context),
                     const SizedBox(height: 100),
                   ],
                 ),
@@ -561,14 +560,14 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'All Events (${otherEvents.length})',
+            'All Events',
             style: TextStyle(
               color: Colors.white,
-              fontSize: ResponsiveHelper.getResponsiveFontSize(context, 20),
+              fontSize: ResponsiveHelper.getResponsiveFontSize(context, 24),
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 16),
+
           if (otherEvents.isEmpty)
             Container(
               height: 200,
@@ -590,7 +589,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               itemBuilder: (context, index) {
                 final event = otherEvents[index];
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.only(bottom: 16),
                   child: _buildEventCard(event.title, event.location, event.imageUrl, context),
                 );
               },
@@ -618,34 +617,35 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         );
       },
       child: Container(
+        height: 160,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: const Color(0xFF1A1A1A),
-          borderRadius: BorderRadius.circular(12),
+          color: const Color(0xFF1E1E1E),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12),
-                bottomLeft: Radius.circular(12),
+                topLeft: Radius.circular(20),
+                bottomLeft: Radius.circular(20),
               ),
               child: Image.network(
                 imageUrl,
-                width: 80,
-                height: 80,
+                width: 140,
+                height: 160,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
-                    width: 80,
-                    height: 80,
+                    width: 140,
+                    height: 160,
                     child: ClipRRect(
                       borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        bottomLeft: Radius.circular(12),
+                        topLeft: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
                       ),
                       child: Image.network(
-                        _getRandomImageUrl(width: 80, height: 80),
+                        _getRandomImageUrl(width: 280, height: 320),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -655,26 +655,37 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Text(
+                      'DEC 01 | SUN',
+                      style: TextStyle(
+                        color: const Color(0xFF8B7FD9),
+                        fontSize: ResponsiveHelper.getResponsiveFontSize(context, 13),
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
                     Text(
                       title,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: ResponsiveHelper.getResponsiveFontSize(context, 14),
-                        fontWeight: FontWeight.w600,
+                        fontSize: ResponsiveHelper.getResponsiveFontSize(context, 18),
+                        fontWeight: FontWeight.bold,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 8),
                     Text(
                       location,
                       style: TextStyle(
-                        color: Colors.grey[400],
-                        fontSize: ResponsiveHelper.getResponsiveFontSize(context, 12),
+                        color: Colors.grey[500],
+                        fontSize: ResponsiveHelper.getResponsiveFontSize(context, 14),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -683,9 +694,13 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(right: 12),
-              child: Icon(Icons.favorite_border, color: Colors.white, size: 20),
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.grey[600],
+                size: 20,
+              ),
             ),
           ],
         ),

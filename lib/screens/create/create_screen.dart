@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../providers/user_provider.dart';
+import 'success_screen.dart';
 
 class CreateScreen extends StatefulWidget {
   const CreateScreen({Key? key}) : super(key: key);
@@ -83,14 +84,10 @@ class _CreateScreenState extends State<CreateScreen> {
         _isLoading = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Party hosting request submitted!'),
-          backgroundColor: const Color(0xFF6958CA),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
+      // Navigate to success screen
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const SuccessScreen(),
         ),
       );
     }
